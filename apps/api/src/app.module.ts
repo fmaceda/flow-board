@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './auth/auth.module';
+import { WorkspaceModule } from './workspace/workspace.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
     PrismaModule,
     RedisModule,
     AuthModule,
+    WorkspaceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
