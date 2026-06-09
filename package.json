@@ -1,0 +1,27 @@
+{
+  "name": "flow-board",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:api": "npm run start:dev --workspace=apps/api",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "build:all": "npm run build --workspaces"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fmaceda/flow-board.git"
+  },
+  "keywords": [],
+  "author": "Fernando Maceda",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/fmaceda/flow-board/issues"
+  },
+  "homepage": "https://github.com/fmaceda/flow-board#readme",
+  "workspaces":[
+    "apps/*",
+    "packages/*"
+  ]
+}
