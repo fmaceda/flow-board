@@ -9,6 +9,7 @@ import { WorkspaceModule } from './workspace/workspace.module';
 import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
 import { TaskModule } from './task/task.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TaskModule } from './task/task.module';
     UserModule,
     ProjectModule,
     TaskModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
