@@ -4,6 +4,7 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectResponseDto } from './dto/project-response.dto';
 import { WorkspacePermissionsService } from '../workspace/workspace-permissions.service';
+import { WorkspaceRole } from '../generated/prisma/client';
 
 @Injectable()
 export class ProjectService {
@@ -71,6 +72,30 @@ export class ProjectService {
     });
     if (!project) throw new NotFoundException('Project not found');
     return project;
+  }
+
+  /**
+   * Resolve a project's workspaceId and verify the user is a member.
+   * Used by TaskModule to run membership checks on project-scoped routes.
+   */
+  async resolveWorkspaceAndCheckMembership(
+    projectId: string,
+    userId: string,
+    requiredRole: WorkspaceRole = WorkspaceRole.MEMBER,
+  ): Promise<string> {
+    const project = await this.prisma.project.findFirst({
+      where: { id: projectId, deletedAt: null },
+    });
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
+
+    await this.permissions.checkMembership(
+      userId,
+      project.workspaceId,
+      requiredRole,
+    );
+    return project.workspaceId;
   }
 
   private toResponseDto(project: {
