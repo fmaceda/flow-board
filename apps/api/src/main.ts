@@ -1,9 +1,10 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
-import { ClassSerializerInterceptor } from '@nestjs/common/serializer/class-serializer.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -33,8 +34,11 @@ async function bootstrap() {
     }),
   );
 
-  // Auto-serialize response objects (respects @Exclude decorators on entities)
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  // Consistent response envelope: { success: true, data: ... }
+  app.useGlobalInterceptors(new TransformInterceptor());
+
+  // Consistent error envelope: { success: false, error: { code, message } }
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   // Swagger - available at /api/docs
   const config = new DocumentBuilder()
