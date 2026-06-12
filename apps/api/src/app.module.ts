@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './auth/auth.module';
 import { WorkspaceModule } from './workspace/workspace.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { WorkspaceModule } from './workspace/workspace.module';
     RedisModule,
     AuthModule,
     WorkspaceModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
