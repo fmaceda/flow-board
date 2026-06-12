@@ -33,13 +33,13 @@ export class TaskResponseDto {
 
 export class TaskListResponseDto {
   @ApiProperty({ type: [TaskResponseDto] })
-  data: TaskResponseDto[];
+  data!: TaskResponseDto[];
 
   @ApiProperty({
     description: 'Pass as ?cursor= on the next request. null = no more pages.',
     nullable: true,
   })
-  nextCursor: string | null;
+  nextCursor!: string | null;
 }
 
 export class TaskQueryDto {
