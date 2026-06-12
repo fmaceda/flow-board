@@ -7,6 +7,7 @@ import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './auth/auth.module';
 import { WorkspaceModule } from './workspace/workspace.module';
 import { UserModule } from './user/user.module';
+import { ProjectModule } from './project/project.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     WorkspaceModule,
     UserModule,
+    ProjectModule,
   ],
   controllers: [AppController],
   providers: [AppService],
