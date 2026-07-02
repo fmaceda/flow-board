@@ -87,12 +87,17 @@ export class AuthService {
         secret: this.config.getOrThrow<string>('JWT_REFRESH_SECRET'),
       });
     } catch {
+      // Clear the bad cookie so the browser drops it and the frontend can
+      // redirect to /login without the middleware bouncing them back.
+      this.clearRefreshCookie(res);
       throw new UnauthorizedException('Invalid or expired refresh token');
     }
 
     const redisKey = this.refreshKey(payload.sub, payload.jti);
     const stored = await this.redis.get(redisKey);
     if (!stored) {
+      // Token was already rotated or Redis was flushed — clear the stale cookie.
+      this.clearRefreshCookie(res);
       throw new UnauthorizedException('Refresh token has been revoked');
     }
 
@@ -196,19 +201,19 @@ export class AuthService {
   private setRefreshCookie(res: Response, token: string): void {
     res.cookie(REFRESH_TOKEN_COOKIE, token, {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'lax',
       secure: this.config.get<string>('NODE_ENV') === 'production',
       maxAge: this.refreshTokenTtl * 1000, // milliseconds
-      path: '/api/v1/auth',
+      path: '/',
     });
   }
 
   private clearRefreshCookie(res: Response): void {
     res.clearCookie(REFRESH_TOKEN_COOKIE, {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'lax',
       secure: this.config.get<string>('NODE_ENV') === 'production',
-      path: '/api/v1/auth',
+      path: '/',
     });
   }
 

@@ -37,8 +37,19 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const config = error.config as RetryConfig | undefined;
 
-    // Only attempt refresh for 401 responses on requests we haven't already retried
-    if (error.response?.status !== 401 || !config || config._retry) {
+    // Only attempt refresh for 401 responses on requests we haven't already retried.
+    // If _retry is already set, the retry itself returned 401 — session is truly invalid.
+    if (error.response?.status !== 401 || !config) {
+      return Promise.reject(error);
+    }
+
+    if (config._retry) {
+      // The retried request also returned 401 — refresh token is gone or invalid.
+      // Clear state and send the user to login.
+      useAuthStore.getState().clear();
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
       return Promise.reject(error);
     }
 
