@@ -1,5 +1,5 @@
 import api from './client';
-import type { AuthUser } from '@/store/auth.store';
+import type { AuthResponse, ApiResponse } from '@flow-board/types';
 
 // ── Request shapes ─────────────────────────────────────────────────────────
 
@@ -15,23 +15,14 @@ export interface LoginDto {
   password: string;
 }
 
-// ── Response shapes ────────────────────────────────────────────────────────
-
-interface AuthResponseData {
-  accessToken: string;
-  user: AuthUser;
-}
-
-type ApiResponse<T> = { success: true; data: T };
-
 // ── API functions ──────────────────────────────────────────────────────────
 
 export const authApi = {
   register: (dto: RegisterDto) =>
-    api.post<ApiResponse<AuthResponseData>>('/auth/register', dto),
+    api.post<ApiResponse<AuthResponse>>('/auth/register', dto),
 
   login: (dto: LoginDto) =>
-    api.post<ApiResponse<AuthResponseData>>('/auth/login', dto),
+    api.post<ApiResponse<AuthResponse>>('/auth/login', dto),
 
   logout: () => api.post('/auth/logout'),
 
@@ -39,5 +30,5 @@ export const authApi = {
     api.post<ApiResponse<{ accessToken: string }>>('/auth/refresh'),
 
   me: () =>
-    api.get<ApiResponse<AuthUser>>('/users/me'),
+    api.get<ApiResponse<AuthResponse['user']>>('/users/me'),
 };

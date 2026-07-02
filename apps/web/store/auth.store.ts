@@ -1,12 +1,7 @@
 import { create } from 'zustand';
+import type { AuthUser } from '@flow-board/types';
 
-export interface AuthUser {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  avatarUrl: string | null;
-}
+export type { AuthUser };
 
 interface AuthState {
   user: AuthUser | null;
