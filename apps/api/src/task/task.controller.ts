@@ -14,6 +14,7 @@ import {
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -31,6 +32,7 @@ import {
 
 @ApiTags('tasks')
 @ApiBearerAuth()
+@ApiParam({ name: 'projectId', description: 'Project UUID' })
 @UseGuards(JwtAuthGuard)
 @Controller('projects/:projectId/tasks')
 export class TaskController {
@@ -60,6 +62,7 @@ export class TaskController {
 
   @Get(':taskId')
   @ApiOperation({ summary: 'Get a task by ID' })
+  @ApiParam({ name: 'taskId', description: 'Task UUID' })
   @ApiResponse({ status: 200, type: TaskResponseDto })
   findOne(
     @Param('projectId') projectId: string,
@@ -71,6 +74,7 @@ export class TaskController {
 
   @Patch(':taskId')
   @ApiOperation({ summary: 'Update a task' })
+  @ApiParam({ name: 'taskId', description: 'Task UUID' })
   @ApiResponse({ status: 200, type: TaskResponseDto })
   update(
     @Param('projectId') projectId: string,
@@ -84,6 +88,7 @@ export class TaskController {
   @Delete(':taskId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Soft-delete a task' })
+  @ApiParam({ name: 'taskId', description: 'Task UUID' })
   @ApiResponse({ status: 204 })
   remove(
     @Param('projectId') projectId: string,

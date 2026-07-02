@@ -13,6 +13,7 @@ import {
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -27,6 +28,7 @@ import { ProjectResponseDto } from './dto/project-response.dto';
 
 @ApiTags('projects')
 @ApiBearerAuth()
+@ApiParam({ name: 'workspaceId', description: 'Workspace UUID' })
 @UseGuards(JwtAuthGuard, WorkspaceMemberGuard)
 @Controller('workspaces/:workspaceId/projects')
 export class ProjectController {
@@ -53,6 +55,7 @@ export class ProjectController {
 
   @Get(':projectId')
   @ApiOperation({ summary: 'Get a project by ID (MEMBER+)' })
+  @ApiParam({ name: 'projectId', description: 'Project UUID' })
   @ApiResponse({ status: 200, type: ProjectResponseDto })
   findOne(
     @Param('workspaceId') workspaceId: string,
@@ -64,6 +67,7 @@ export class ProjectController {
   @Patch(':projectId')
   @Roles(WorkspaceRole.ADMIN)
   @ApiOperation({ summary: 'Update a project (ADMIN+)' })
+  @ApiParam({ name: 'projectId', description: 'Project UUID' })
   @ApiResponse({ status: 200, type: ProjectResponseDto })
   update(
     @Param('workspaceId') workspaceId: string,
@@ -77,6 +81,7 @@ export class ProjectController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Roles(WorkspaceRole.ADMIN)
   @ApiOperation({ summary: 'Soft-delete a project (ADMIN+)' })
+  @ApiParam({ name: 'projectId', description: 'Project UUID' })
   @ApiResponse({ status: 204 })
   remove(
     @Param('workspaceId') workspaceId: string,

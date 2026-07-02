@@ -13,6 +13,7 @@ import {
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -62,6 +63,7 @@ export class WorkspaceController {
   @Get(':workspaceId')
   @UseGuards(WorkspaceMemberGuard)
   @ApiOperation({ summary: 'Get a workspace by ID' })
+  @ApiParam({ name: 'workspaceId', description: 'Workspace UUID' })
   @ApiResponse({ status: 200, type: WorkspaceResponseDto })
   findOne(
     @Param('workspaceId') workspaceId: string,
@@ -73,6 +75,7 @@ export class WorkspaceController {
   @UseGuards(WorkspaceMemberGuard)
   @Roles(WorkspaceRole.ADMIN)
   @ApiOperation({ summary: 'Update a workspace (ADMIN+)' })
+  @ApiParam({ name: 'workspaceId', description: 'Workspace UUID' })
   @ApiResponse({ status: 200, type: WorkspaceResponseDto })
   update(
     @Param('workspaceId') workspaceId: string,
@@ -86,6 +89,7 @@ export class WorkspaceController {
   @UseGuards(WorkspaceMemberGuard)
   @Roles(WorkspaceRole.OWNER)
   @ApiOperation({ summary: 'Delete a workspace (OWNER only)' })
+  @ApiParam({ name: 'workspaceId', description: 'Workspace UUID' })
   @ApiResponse({ status: 204 })
   remove(@Param('workspaceId') workspaceId: string): Promise<void> {
     return this.workspaceService.remove(workspaceId);
@@ -96,6 +100,7 @@ export class WorkspaceController {
   @Get(':workspaceId/members')
   @UseGuards(WorkspaceMemberGuard)
   @ApiOperation({ summary: 'List workspace members (MEMBER+)' })
+  @ApiParam({ name: 'workspaceId', description: 'Workspace UUID' })
   @ApiResponse({ status: 200, type: [WorkspaceMemberResponseDto] })
   getMembers(
     @Param('workspaceId') workspaceId: string,
@@ -107,6 +112,7 @@ export class WorkspaceController {
   @UseGuards(WorkspaceMemberGuard)
   @Roles(WorkspaceRole.ADMIN)
   @ApiOperation({ summary: 'Invite a user to the workspace (ADMIN+)' })
+  @ApiParam({ name: 'workspaceId', description: 'Workspace UUID' })
   @ApiResponse({ status: 201, type: WorkspaceMemberResponseDto })
   inviteMember(
     @Param('workspaceId') workspaceId: string,
@@ -119,6 +125,8 @@ export class WorkspaceController {
   @UseGuards(WorkspaceMemberGuard)
   @Roles(WorkspaceRole.OWNER)
   @ApiOperation({ summary: "Change a member's role (OWNER only)" })
+  @ApiParam({ name: 'workspaceId', description: 'Workspace UUID' })
+  @ApiParam({ name: 'userId', description: 'Target member UUID' })
   @ApiResponse({ status: 200, type: WorkspaceMemberResponseDto })
   updateMemberRole(
     @Param('workspaceId') workspaceId: string,
@@ -139,6 +147,8 @@ export class WorkspaceController {
   @UseGuards(WorkspaceMemberGuard)
   @Roles(WorkspaceRole.ADMIN)
   @ApiOperation({ summary: 'Remove a member from the workspace (ADMIN+)' })
+  @ApiParam({ name: 'workspaceId', description: 'Workspace UUID' })
+  @ApiParam({ name: 'userId', description: 'Target member UUID' })
   @ApiResponse({ status: 204 })
   removeMember(
     @Param('workspaceId') workspaceId: string,

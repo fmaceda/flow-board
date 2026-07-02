@@ -13,6 +13,7 @@ import {
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -26,6 +27,7 @@ import { CommentResponseDto } from './dto/comment-response.dto';
 
 @ApiTags('comments')
 @ApiBearerAuth()
+@ApiParam({ name: 'taskId', description: 'Task UUID' })
 @UseGuards(JwtAuthGuard)
 @Controller('tasks/:taskId/comments')
 export class CommentController {
@@ -54,6 +56,7 @@ export class CommentController {
 
   @Patch(':commentId')
   @ApiOperation({ summary: 'Edit a comment (author only)' })
+  @ApiParam({ name: 'commentId', description: 'Comment UUID' })
   @ApiResponse({ status: 200, type: CommentResponseDto })
   update(
     @Param('taskId') taskId: string,
@@ -67,6 +70,7 @@ export class CommentController {
   @Delete(':commentId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a comment (author or ADMIN+)' })
+  @ApiParam({ name: 'commentId', description: 'Comment UUID' })
   @ApiResponse({ status: 204 })
   remove(
     @Param('taskId') taskId: string,
